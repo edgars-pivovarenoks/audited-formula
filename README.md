@@ -82,11 +82,11 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
         Amount carTco = carTcoFormula.Calculate();
 
-		WriteResult();
-		WriteAuditLog();
+	WriteResult();
+	WriteAuditLog();
 
-		void WriteAuditLog() => carTco.AuditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
-		void WriteResult() => Console.WriteLine($"Result : {carTco.Value}");
+	void WriteAuditLog() => carTco.AuditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
+	void WriteResult() => Console.WriteLine($"Result : {carTco.Value}");
       }
     }
 ```    

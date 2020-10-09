@@ -31,7 +31,7 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
     // Result : 20872.00
 
 ## Proposal 
-    public class CarTotalCostOfOwnershipFormula : Formula
+    public class CarTotalCostOfOwnershipFormula : AuditedFormula
     {
       Amount MonthsInYear = Amount.Of(12);
 
@@ -67,7 +67,7 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
     public class Program
     {
       public static void Main() {
-        var carTcoFormula = new CarTotalCostOfOwnershipFormula {
+        Formula carTcoFormula = new CarTotalCostOfOwnershipFormula {
           PurchasePrice = Amount.Of(5600.00),
           YearsOfOwnership = Amount.Of(5),
           FuelCostMonthly = Amount.Of(123.45),
@@ -79,12 +79,11 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
         Amount carTco = carTcoFormula.Calculate();
 
-        WriteAuditLog(carTco);
-      }
+		WriteResult();
+		WriteAuditLog();
 
-      private static void WriteAuditLog(Amount taxResult) {
-        foreach (Amount calculation in taxResult.AuditLog)
-          Console.WriteLine(calculation.Equation);
+		void WriteAuditLog() => carTco.AuditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
+		void WriteResult() => Console.WriteLine($"Result : {carTco.Value}");
       }
     }
     

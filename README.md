@@ -48,7 +48,7 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
       Amount OtherCosts => Is(() => FuelCostsYearly 
             + LoanInterestYearly 
-            + MainteneceCostYearly 
+            + MaintenanceCostYearly 
             + RoundedInsuranceCostYearly 
             + InventedTaxYearly);
 
@@ -67,19 +67,19 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
     public class Program
     {
       public static void Main() {
-        var carTCO = new CarTotalCostOfOwnershipFormula {
+        var carTcoFormula = new CarTotalCostOfOwnershipFormula {
           PurchasePrice = Amount.Of(5600.00),
           YearsOfOwnership = Amount.Of(5),
           FuelCostMonthly = Amount.Of(123.45),
-          MainteneceCostYearly = Amount.Of(433.00),			
+          MaintenanceCostYearly = Amount.Of(433.00),			
           InsuranceCostYearly = Amount.Of(223.00),
           LoanPaymentMonthly = Amount.Of(105.00),
           TaxCostsYearly = Amount.Of(116.00)
         };		
 
-        Amount tax = carTCO.Calculate();
+        Amount carTco = carTcoFormula.Calculate();
 
-        WriteAuditLog(tax);
+        WriteAuditLog(carTco);
       }
 
       private static void WriteAuditLog(Amount taxResult) {
@@ -97,10 +97,10 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 - Loan Payment Monthly[105.00] = Input value
 - Years Of Ownership[5.00] = Input value
 - Loan Interest Yearly[140.00] = (Loan Payment Monthly[105.00] * Months In Year[12.00]) - (Purchase Price[5600.00] / Years Of Ownership[5.00])
-- Maintenece Cost Yearly[433.00] = Input value
+- Maintenance Cost Yearly[433.00] = Input value
 - Insurance Cost Yearly[223.00] = Input value
 - Rounded Insurance Cost Yearly[1000.00] = CeilingThousands(Insurance Cost Yearly[223.00]
 - Tax Costs Yearly[116.00] = Input value
 - Invented Tax Yearly[0.00] = Max(Amount.Zero, (Tax Costs Yearly[116.00] - Loan Interest Yearly[140.00])
-- Other Costs[3054.40] = (((Fuel Costs Yearly[1481.40] + Loan Interest Yearly[140.00]) + Maintenece Cost Yearly[433.00]) + Rounded Insurance Cost Yearly[1000.00]) + Invented Tax Yearly[0.00]
+- Other Costs[3054.40] = (((Fuel Costs Yearly[1481.40] + Loan Interest Yearly[140.00]) + Maintenance Cost Yearly[433.00]) + Rounded Insurance Cost Yearly[1000.00]) + Invented Tax Yearly[0.00]
 - Total[20872.00] = Purchase Price[5600.00] + (Other Costs[3054.40] * Years Of Ownership[5.00])

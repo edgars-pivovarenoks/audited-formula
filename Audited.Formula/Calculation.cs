@@ -10,12 +10,11 @@ namespace Audited.Formula
     {
         private Dictionary<string, Amount> _calculationResultsCache;
         private Expression<Func<Amount>> _calculationExpression;
-        private AuditedFormula _parentFormula; 
-        private string _name;
+        private AuditedFormula _parentFormula;
 
         public decimal Value => GetResult().Value;
 
-        public string Name => _name;
+        public string Name { get; private set; }
 
         public IList<Amount> AuditLog => GetResult().AuditLog;
 
@@ -24,18 +23,18 @@ namespace Audited.Formula
         public Calculation(string name, Expression<Func<Amount>> expression, AuditedFormula parentFormula, Dictionary<string, Amount> equationResultsCache)
         {
             _parentFormula = parentFormula;
-            _name = name;
+            Name = name;
             _calculationExpression = expression;
             _calculationResultsCache = equationResultsCache;
         }
 
         public Amount GetResult() {
-            if (!_calculationResultsCache.TryGetValue(_name, out Amount result)) {
+            if (!_calculationResultsCache.TryGetValue(Name, out Amount result)) {
                 result = _calculationExpression.Compile()();
                 string cleanExpression = ComposeExpressionAsText();
                 string expressionWithValues = UpdateExpressionWithValues(cleanExpression, result);
-                ((AmountMetadata)result).SetName(_name).SetEquationAsText(() => expressionWithValues);
-                _calculationResultsCache.Add(_name, result);
+                ((AmountMetadata)result).SetName(Name).SetEquationAsText(() => expressionWithValues);
+                _calculationResultsCache.Add(Name, result);
             }
             return result;
         }
@@ -78,7 +77,7 @@ namespace Audited.Formula
 
         AmountMetadata AmountMetadata.SetName(string name)
         {
-            _name = name;
+            Name = name;
             return this;
         }
 

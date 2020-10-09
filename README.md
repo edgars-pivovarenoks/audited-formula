@@ -34,6 +34,9 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
 ## Proposal 
 ```csharp
+    using Audited.Formula;
+    using System;
+    
     public class CarTotalCostOfOwnershipFormula : AuditedFormula
     {
       Amount MonthsInYear = Amount.Of(12);
@@ -62,10 +65,7 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
       Amount RoundedInsuranceCostYearly => Is(() => Math.CeilingThousands(InsuranceCostYearly));
 
       Amount InventedTaxYearly => Is(() => Math.Max(Amount.Zero, TaxCostsYearly - LoanInterestYearly));
-    }
-    
-    using Audited.Formula;
-    using System;
+    }   
 
     public class Program
     {
@@ -82,12 +82,13 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
         Amount carTco = carTcoFormula.Calculate();
 
-	WriteResult();
-	WriteAuditLog();
-
-	void WriteAuditLog() => carTco.AuditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
-	void WriteResult() => Console.WriteLine($"Result : {carTco.Value}");
+	WriteResult(carTco);
+	WriteAuditLog(carTco.AuditLog);
       }
+      
+      static void void WriteAuditLog(IList<Amount> auditLog) => auditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
+      
+      static void void WriteResult(Amount result) => Console.WriteLine($"Result : {result.Value}");      
     }
 ```    
     

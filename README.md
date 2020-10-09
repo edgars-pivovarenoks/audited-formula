@@ -46,7 +46,11 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
       protected override Amount Total => Is(() => PurchasePrice + OtherCosts * YearsOfOwnership);
 
-      Amount OtherCosts => Is(() => FuelCostsYearly + LoanInterestYearly + MainteneceCostYearly + RoundedInsuranceCostYearly + InventedTaxYearly);
+      Amount OtherCosts => Is(() => FuelCostsYearly 
+            + LoanInterestYearly 
+            + MainteneceCostYearly 
+            + RoundedInsuranceCostYearly 
+            + InventedTaxYearly);
 
       Amount FuelCostsYearly => Is(() => FuelCostMonthly * MonthsInYear);
 

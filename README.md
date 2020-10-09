@@ -2,6 +2,7 @@
 Strategy pattern inspired tool to compose formulas and log intermediate calculations.
 
 ## Problem 
+```csharp
     using System;
 
     public class Program
@@ -29,9 +30,14 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
     }
     
     // Result : 20872.00
+```
 
 ## Proposal 
-    public class CarTotalCostOfOwnershipFormula : Formula
+```csharp
+    using Audited.Formula;
+    using System;
+    
+    public class CarTotalCostOfOwnershipFormula : AuditedFormula
     {
       Amount MonthsInYear = Amount.Of(12);
 
@@ -59,15 +65,12 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
       Amount RoundedInsuranceCostYearly => Is(() => Math.CeilingThousands(InsuranceCostYearly));
 
       Amount InventedTaxYearly => Is(() => Math.Max(Amount.Zero, TaxCostsYearly - LoanInterestYearly));
-    }
-    
-    using Audited.Formula;
-    using System;
+    }   
 
     public class Program
     {
       public static void Main() {
-        var carTcoFormula = new CarTotalCostOfOwnershipFormula {
+        Formula carTcoFormula = new CarTotalCostOfOwnershipFormula {
           PurchasePrice = Amount.Of(5600.00),
           YearsOfOwnership = Amount.Of(5),
           FuelCostMonthly = Amount.Of(123.45),
@@ -79,15 +82,15 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 
         Amount carTco = carTcoFormula.Calculate();
 
-        WriteAuditLog(carTco);
+	WriteResult(carTco);
+	WriteAuditLog(carTco.AuditLog);
       }
-
-      private static void WriteAuditLog(Amount taxResult) {
-        foreach (Amount calculation in taxResult.AuditLog)
-          Console.WriteLine(calculation.Equation);
-      }
+      
+      static void WriteAuditLog(IList<Amount> auditLog) => auditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
+      
+      static void WriteResult(Amount result) => Console.WriteLine($"Result : {result.Value}");      
     }
-    
+```    
     
 ### Calculation log
 - Purchase Price[5600.00] = Input value

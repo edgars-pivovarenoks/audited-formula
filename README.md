@@ -2,6 +2,7 @@
 Strategy pattern inspired tool to compose formulas and log intermediate calculations.
 
 ## Problem 
+```csharp
     using System;
 
     public class Program
@@ -29,8 +30,10 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
     }
     
     // Result : 20872.00
+```
 
 ## Proposal 
+```csharp
     public class CarTotalCostOfOwnershipFormula : AuditedFormula
     {
       Amount MonthsInYear = Amount.Of(12);
@@ -86,7 +89,7 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 		void WriteResult() => Console.WriteLine($"Result : {carTco.Value}");
       }
     }
-    
+```    
     
 ### Calculation log
 - Purchase Price[5600.00] = Input value

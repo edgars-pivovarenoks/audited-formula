@@ -86,9 +86,9 @@ Strategy pattern inspired tool to compose formulas and log intermediate calculat
 	WriteAuditLog(carTco.AuditLog);
       }
       
-      static void void WriteAuditLog(IList<Amount> auditLog) => auditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
+      static void WriteAuditLog(IList<Amount> auditLog) => auditLog.Select(l => l.Equation).ToList().ForEach(Console.WriteLine);
       
-      static void void WriteResult(Amount result) => Console.WriteLine($"Result : {result.Value}");      
+      static void WriteResult(Amount result) => Console.WriteLine($"Result : {result.Value}");      
     }
 ```    
     

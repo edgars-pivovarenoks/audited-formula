@@ -10,7 +10,7 @@ namespace Audited.Formula
     {
         private Dictionary<string, Amount> _calculationResultsCache;
         private Expression<Func<Amount>> _calculationExpression;
-        private Formula _parentFormula; 
+        private AuditedFormula _parentFormula; 
         private string _name;
 
         public decimal Value => GetResult().Value;
@@ -21,7 +21,7 @@ namespace Audited.Formula
 
         public string Equation => GetResult().Equation;
 
-        public Calculation(string name, Expression<Func<Amount>> expression, Formula parentFormula, Dictionary<string, Amount> equationResultsCache)
+        public Calculation(string name, Expression<Func<Amount>> expression, AuditedFormula parentFormula, Dictionary<string, Amount> equationResultsCache)
         {
             _parentFormula = parentFormula;
             _name = name;

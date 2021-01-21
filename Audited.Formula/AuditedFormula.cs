@@ -13,6 +13,12 @@ namespace Audited.Formula
 
         protected abstract Amount Total { get; }
 
+        public decimal Value => Calculate().Value;
+
+        public IList<Amount> AuditLog => Calculate().AuditLog;
+
+        public string Equation => Calculate().Equation;
+
         protected AmountMath Math { get; } = new AmountMath(); // todo : injectable
 
         internal string GetMathMemberName() => nameof(Math);
@@ -46,6 +52,9 @@ namespace Audited.Formula
             StackFrame[] fr = new StackTrace().GetFrames();
             if (fr != null)
                 equationName = fr[1].GetMethod().Name.Replace("get_", "");
+            
+            if (equationName.Equals(nameof(Total)))
+                equationName = this.GetType().Name.Replace("Formula", string.Empty);
 
             return new Calculation(equationName ?? "#call stack error#", expression, this, _amountsCache);
         }

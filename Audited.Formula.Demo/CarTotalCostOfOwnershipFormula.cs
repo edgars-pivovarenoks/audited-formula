@@ -15,7 +15,7 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 
 	protected override Amount Total => Is(() => PurchasePrice + OtherCosts * YearsOfOwnership);
 
-	Amount OtherCosts => Is(() => FuelCostsYearly + LoanInterestYearly + MaintenanceCostYearly + RoundedInsuranceCostYearly + InventedTaxYearly);
+	Amount OtherCosts => Is(() => FuelCostsYearly + LoanInterestYearly + MaintenanceCostYearly + RoundedInsuranceCostYearly + InventedTaxYearly + CarTiresCostYearly);
 
 	Amount FuelCostsYearly => Is(() => FuelCostMonthly * MonthsInYear);
 
@@ -24,4 +24,19 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 	Amount RoundedInsuranceCostYearly => Is(() => Math.CeilingThousands(InsuranceCostYearly));
 
 	Amount InventedTaxYearly => Is(() => Math.Max(Amount.Zero, TaxCostsYearly - LoanInterestYearly));
+
+	Formula CarTiresCostYearly => new CarTiresCostYearlyFormula
+	{
+		FuelCostsYearly = FuelCostsYearly
+	};
+
+}
+
+public class CarTiresCostYearlyFormula : AuditedFormula
+{
+	Amount TireUsageCoeficient = Amount.Of(1.5);
+
+	public Amount FuelCostsYearly;
+
+	protected override Amount Total => Is(() => TireUsageCoeficient * FuelCostsYearly);
 }

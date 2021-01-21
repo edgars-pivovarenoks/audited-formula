@@ -8,6 +8,7 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 		YearsOfOwnership,
 		PurchasePrice,
 		FuelCostMonthly,
+		SomeFuelCheck,
 		LoanPaymentMonthly,
 		MaintenanceCostYearly,
 		InsuranceCostYearly,
@@ -17,13 +18,13 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 
 	Amount OtherCosts => Is(() => FuelCostsYearly + LoanInterestYearly + MaintenanceCostYearly + RoundedInsuranceCostYearly + InventedTaxYearly + CarTiresCostYearly);
 
-	Amount FuelCostsYearly => Is(() => FuelCostMonthly * MonthsInYear);
+	Amount FuelCostsYearly => Is(() => SomeFuelCheck == FuelCostMonthly ? Zero : FuelCostMonthly * MonthsInYear);
 
 	Amount LoanInterestYearly => Is(() => LoanPaymentMonthly * MonthsInYear - PurchasePrice / YearsOfOwnership);
 
 	Amount RoundedInsuranceCostYearly => Is(() => Math.CeilingThousands(InsuranceCostYearly));
 
-	Amount InventedTaxYearly => Is(() => Math.Max(Amount.Zero, TaxCostsYearly - LoanInterestYearly));
+	Amount InventedTaxYearly => Is(() => Math.Max(Zero, TaxCostsYearly - LoanInterestYearly));
 
 	Amount CarTiresCostYearly => new CarTiresCostYearlyFormula {
 		FuelCostsYearly = FuelCostsYearly

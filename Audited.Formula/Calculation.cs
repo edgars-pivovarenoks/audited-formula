@@ -6,19 +6,19 @@ using System.Text.RegularExpressions;
 
 namespace Audited.Formula
 {
-    internal class Calculation : Amount, AmountMetadata
+	internal class Calculation : Amount, AmountMetadata
     {
         private Dictionary<string, Amount> _calculationResultsCache;
         private Expression<Func<Amount>> _calculationExpression;
         private AuditedFormula _parentFormula;
 
-        public decimal Value => GetResult().Value;
+        public override decimal Value => GetResult().Value;
 
         public string Name { get; private set; }
 
-        public IList<Amount> AuditLog => GetResult().AuditLog;
+        public override IList<Amount> AuditLog => GetResult().AuditLog;
 
-        public string Equation => GetResult().Equation;
+        public override string Equation => GetResult().Equation;
 
         public Calculation(string name, Expression<Func<Amount>> expression, AuditedFormula parentFormula, Dictionary<string, Amount> equationResultsCache)
         {
@@ -45,7 +45,7 @@ namespace Audited.Formula
         {
             string expressionWithValues = expression;
 
-            var amountsWithValues = _calculationResultsCache.Values.Union(calculationResult.AuditLog);
+            var amountsWithValues = _calculationResultsCache.Values.Union(calculationResult.AuditLog, new AmountEqualsByNameComparer());
 
             foreach (AmountMetadata amount in amountsWithValues)
                 expressionWithValues = UpdateWithValue(expressionWithValues, amount);
@@ -88,13 +88,19 @@ namespace Audited.Formula
 
         string AmountMetadata.ToSentenceCaseWithValue() => ((AmountMetadata)GetResult()).ToSentenceCaseWithValue();
 
-        //public static Amount operator *(Calculation a, Calculation b)
-        //{
-        //    Amount aResult = a.GetResult();
-        //    Amount bResult = b.GetResult();
+		//public bool Equals([AllowNull] Amount other)
+		//{
+		//	throw new NotImplementedException();
+		//}
 
-        //    return new FixedAmount(aResult.Value * bResult.Value, aResult, bResult);
-        //}
+		//public static Amount operator *(Calculation a, Calculation b)
+		//{
+		//    Amount aResult = a.GetResult();
+		//    Amount bResult = b.GetResult();
 
-    }
+		//    return new FixedAmount(aResult.Value * bResult.Value, aResult, bResult);
+		//}
+
+
+	}
 }

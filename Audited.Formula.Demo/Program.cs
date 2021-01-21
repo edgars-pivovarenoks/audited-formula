@@ -9,7 +9,8 @@ public class Program
 			PurchasePrice = Amount.Of(5600.00),
 			YearsOfOwnership = Amount.Of(5),
 			FuelCostMonthly = Amount.Of(123.45),
-			MaintenanceCostYearly = Amount.Of(433.00),			
+			SomeFuelCheck = Amount.Of(123.45),
+			MaintenanceCostYearly = Amount.Of(433.00),
 			InsuranceCostYearly = Amount.Of(223.00),
 			LoanPaymentMonthly = Amount.Of(105.00),
 			TaxCostsYearly = Amount.Of(116.00)

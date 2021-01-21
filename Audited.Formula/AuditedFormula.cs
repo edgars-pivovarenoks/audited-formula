@@ -7,23 +7,23 @@ using System.Reflection;
 
 namespace Audited.Formula
 {
-    public abstract class AuditedFormula : Formula
+	public abstract class AuditedFormula : Formula, AmountName
     {
         private Dictionary<string, Amount> _amountsCache;
 
         protected abstract Amount Total { get; }
 
-        public decimal Value => Calculate().Value;
+        public override decimal Value => Calculate().Value;
 
-        public IList<Amount> AuditLog => Calculate().AuditLog;
+        public override IList<Amount> AuditLog => Calculate().AuditLog;
 
-        public string Equation => Calculate().Equation;
+        public override string Equation => Calculate().Equation;
 
         protected AmountMath Math { get; } = new AmountMath(); // todo : injectable
 
-        internal string GetMathMemberName() => nameof(Math);
+		internal string GetMathMemberName() => nameof(Math);
 
-        public Amount Calculate()
+        public override Amount Calculate()
         {
             _amountsCache = new Dictionary<string, Amount>();
             SetAmountNames(this);
@@ -59,5 +59,6 @@ namespace Audited.Formula
             return new Calculation(equationName ?? "#call stack error#", expression, this, _amountsCache);
         }
 
-    }
+        string AmountName.Name => ((AmountMetadata)Total).Name;
+	}
 }

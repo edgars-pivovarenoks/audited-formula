@@ -1,7 +1,9 @@
-﻿namespace Audited.Formula
+﻿using System;
+
+namespace Audited.Formula
 {
-    public interface Formula : Amount
+	public abstract class Formula : Amount
     {
-        Amount Calculate();
+        public virtual Amount Calculate() => throw new InvalidOperationException("Calculate must me implemented.");
     }
 }

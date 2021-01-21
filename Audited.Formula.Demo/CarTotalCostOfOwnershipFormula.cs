@@ -25,8 +25,7 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 
 	Amount InventedTaxYearly => Is(() => Math.Max(Amount.Zero, TaxCostsYearly - LoanInterestYearly));
 
-	Formula CarTiresCostYearly => new CarTiresCostYearlyFormula
-	{
+	Amount CarTiresCostYearly => new CarTiresCostYearlyFormula {
 		FuelCostsYearly = FuelCostsYearly
 	};
 

@@ -4,10 +4,6 @@ namespace Audited.Formula
 {
     public class AmountMath : AmountMethodCollection
     {
-        // todo : wrap remaining Math functions
-
-        // todo : typical financial math could go to separate helper
-
         public Amount Abs(Amount value) => Call(Math.Abs, value);
 
         public Amount Truncate(Amount value) => Call(Math.Truncate, value);
@@ -30,12 +26,4 @@ namespace Audited.Formula
 
         public Amount NotLessThanZero(Amount value) => Call(val => Math.Max(0, val), value);
     }
-
-    public abstract class AmountMethodCollection {
-
-        public Amount Call(Func<decimal, decimal> func, Amount p1) => new FixedAmount(func(p1.Value), p1.AuditLog);
-
-        public Amount Call(Func<decimal,decimal,decimal> func, Amount p1, Amount p2) => new FixedAmount(func(p1.Value, p2.Value), p1, p2);
-    }
-
 }

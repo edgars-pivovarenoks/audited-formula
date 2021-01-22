@@ -7,7 +7,12 @@ using System.Reflection;
 
 namespace Audited.Formula
 {
-	public abstract class AuditedFormula : Formula, AmountName
+    public abstract class AuditedFormula<TAmountMethods> : AuditedFormula where TAmountMethods : AmountMethodCollection, new()
+    {
+        protected TAmountMethods Math { get; } = new TAmountMethods(); // todo : injectable
+    }
+
+    public abstract class AuditedFormula : Formula, AmountName 
     {
         private Dictionary<string, Amount> _amountsCache;
 
@@ -15,11 +20,9 @@ namespace Audited.Formula
 
         public override decimal Value => Calculate().Value;
 
-        public override IList<Amount> AuditLog => Calculate().AuditLog;
+        public override List<Amount> AuditLog => Calculate().AuditLog;
 
         public override string Equation => Calculate().Equation;
-
-        protected AmountMath Math { get; } = new AmountMath(); // todo : injectable
 
 		internal string GetMathMemberName() => nameof(Math);
 
@@ -52,11 +55,11 @@ namespace Audited.Formula
             StackFrame[] fr = new StackTrace().GetFrames();
             if (fr != null)
                 equationName = fr[1].GetMethod().Name.Replace("get_", "");
-            
-            if (equationName.Equals(nameof(Total)))
-                equationName = this.GetType().Name.Replace("Formula", string.Empty);
 
-            return new Calculation(equationName ?? "#call stack error#", expression, this, _amountsCache);
+			if (equationName.Equals(nameof(Total)))
+				equationName = this.GetType().Name.Replace("Formula", string.Empty);
+
+			return new Calculation(equationName ?? "#call stack error#", expression, this, _amountsCache);
         }
 
         string AmountName.Name => ((AmountMetadata)Total).Name;

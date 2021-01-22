@@ -8,5 +8,7 @@ namespace Audited.Formula
 		public bool Equals([AllowNull] Amount x, [AllowNull] Amount y) => ((AmountName)x).Name.Equals(((AmountName)y).Name);
 
         public int GetHashCode([DisallowNull] Amount obj) => ((AmountName)obj).Name.GetHashCode();
+
+		public static AmountEqualsByNameComparer Instance => new AmountEqualsByNameComparer();
 	}
 }

@@ -1,6 +1,6 @@
 ﻿using Audited.Formula;
 
-public class CarTotalCostOfOwnershipFormula : AuditedFormula
+public class CarTotalCostOfOwnershipFormula : AuditedFormula<AmountMath>
 {
 	Amount MonthsInYear = Amount.Of(12);
 
@@ -12,9 +12,12 @@ public class CarTotalCostOfOwnershipFormula : AuditedFormula
 		LoanPaymentMonthly,
 		MaintenanceCostYearly,
 		InsuranceCostYearly,
-		TaxCostsYearly;
+		TaxCostsYearly,
+		OtherCostsLimit;
 
-	protected override Amount Total => Is(() => PurchasePrice + OtherCosts * YearsOfOwnership);
+	protected override Amount Total => Is(() => PurchasePrice + OtherCostsLimited * YearsOfOwnership);
+
+	Amount OtherCostsLimited => Is(() => OtherCosts > OtherCostsLimit ?  OtherCosts : OtherCostsLimit);
 
 	Amount OtherCosts => Is(() => FuelCostsYearly + LoanInterestYearly + MaintenanceCostYearly + RoundedInsuranceCostYearly + InventedTaxYearly + CarTiresCostYearly);
 

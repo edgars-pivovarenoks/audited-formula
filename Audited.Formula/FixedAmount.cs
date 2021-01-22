@@ -11,6 +11,7 @@ namespace Audited.Formula
         public override decimal Value { get; }
 
         private string equation;
+
         public override string Equation => equation;
 
         public string Name { get; private set; }
@@ -18,7 +19,8 @@ namespace Audited.Formula
         public static implicit operator FixedAmount(decimal value) => new FixedAmount(value, "<Input value>");
 
         private List<Amount> auditLog = new List<Amount>();
-        public override IList<Amount> AuditLog => auditLog;
+
+        public override List<Amount> AuditLog => auditLog;
 
         public override string ToString() => ((AmountMetadata)this).ToSentenceCaseWithValue();
 
@@ -32,7 +34,7 @@ namespace Audited.Formula
             Name = userFriendlyName;
         }
 
-        private static IEnumerable<Amount> MergeLogs(Amount a, Amount b) => a.AuditLog.Union(b.AuditLog, new AmountEqualsByNameComparer());
+        private static IEnumerable<Amount> MergeLogs(Amount a, Amount b) => a.AuditLog.Union(b.AuditLog, AmountEqualsByNameComparer.Instance);
 
         AmountMetadata AmountMetadata.SetName(string name)
         {
